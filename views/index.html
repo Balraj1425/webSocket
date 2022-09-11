@@ -1,0 +1,33 @@
+<html>
+    <head>
+        <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
+    </head>
+    <body>
+        <div>
+            <input type="text" id="messageText"/>
+            <input type="submit" onclick="getMessage()"/>
+        </div>
+        <div>
+            <p id="messages">
+
+            </p>
+        </div>
+        <script>
+            const socket = io("http://127.0.0.1:3008");
+            console.log("inside script tag")
+            socket.on("conn")
+
+            const getMessage = () =>{
+                console.log("function called")
+                let msg = document.getElementById("messageText").value;
+                socket.emit("chat",msg)
+            }
+            socket.on("chat", data=>{
+                console.log(data)
+                let elm = document.createElement("div")
+                elm.appendChild(document.createTextNode(data))
+                document.getElementById("messages").appendChild(elm)
+            })
+        </script>
+    </body>
+</html>
