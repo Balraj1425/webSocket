@@ -1,8 +1,11 @@
 const express = require("express")
 
 const app = express();
+
+//web socket server
 const socketServer = require("http").createServer(app)
 
+//created socket using socket.io and wrapped with socket server and handled cors policy
 const soc = require("socket.io")(socketServer, {cors:{
     origin:"*"
 }})
@@ -13,19 +16,17 @@ socketServer.listen(port,()=>{
 })
 
 
-app.use(express.json())
-
-app.get("/hello",(req, res)=>{
-    res.send("hello world")
-})
-
 app.get("/",(req, res)=>{
     res.sendFile(__dirname+"/views/index.html")
 })
 
-soc.on("conn",(socket)=>{
+//created connection and hanled the data from index.html 
+soc.on("connection",(socket)=>{
     console.log("socket connected  ", socket.id)
-    soc.on("chat", data=>{
+    //data received from server
+    socket.on("chat", data=>{
         console.log(data)
+        //send back to client
+        socket.broadcast.emit("chat", data)
     })
 })

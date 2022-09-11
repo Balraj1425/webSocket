@@ -13,15 +13,22 @@
             </p>
         </div>
         <script>
+            //connect with server
             const socket = io("http://127.0.0.1:3008");
             console.log("inside script tag")
-            socket.on("conn")
+            socket.on("connection")
 
             const getMessage = () =>{
                 console.log("function called")
                 let msg = document.getElementById("messageText").value;
+                console.log(msg)
+                let elm = document.createElement("div")
+                elm.appendChild(document.createTextNode("->"+msg))
+                document.getElementById("messages").appendChild(elm)
+                //send value to server
                 socket.emit("chat",msg)
             }
+            //message received from client
             socket.on("chat", data=>{
                 console.log(data)
                 let elm = document.createElement("div")
